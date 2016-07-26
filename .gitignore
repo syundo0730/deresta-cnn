@@ -1,0 +1,9 @@
+.idea
+data
+src/client/third_party/minicap
+src/client/third_party/minitouch
+*.pyc
+*.log
+*.lock
+*.png
+*.yaml
