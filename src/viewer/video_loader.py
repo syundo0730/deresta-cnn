@@ -21,12 +21,12 @@ class VideoLoader:
         self.height = self.capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
         self.frame_num = self.capture.get(cv2.CAP_PROP_FRAME_COUNT)
 
-    def read(self):
-        if self.capture is not None and self.capture.isOpened():
-            ret, frame = self.capture.read()
-            if not ret:
-                return None, 0
-            time = self.capture.get(cv2.CAP_PROP_POS_MSEC)
-            return frame, time
-        else:
-            return None, 0
+    # def read(self):
+    #     if self.capture is not None and self.capture.isOpened():
+    #         ret, frame = self.capture.read()
+    #         if not ret:
+    #             return None, 0
+    #         time = self.capture.get(cv2.CAP_PROP_POS_MSEC)
+    #         return frame, time
+    #     else:
+    #         return None, 0

@@ -12,7 +12,7 @@ import numpy as np
 
 IMAGE_ROOT = os.path.join(os.path.dirname(__file__), '../../data/training_data/image')
 NOTE_ROOT = os.path.join(os.path.dirname(__file__), '../../data/scraped_data/note')
-VIDEO_ROOT = os.path.join(os.path.dirname(__file__), '../../data/scraped_data/video')
+VIDEO_ROOT = os.path.join(os.path.dirname(__file__), '../../data/scraped_data/video/raw')
 SONG_LIST_PATH = os.path.join(os.path.dirname(__file__), '../../data/scraped_data/song_list.json')
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), '../../data/training_data/chainer_alex.model')
@@ -35,10 +35,9 @@ class Trainer:
 
         self.batch_size = batch_size
 
-        label_types = ['none', 'pushed', 'right', 'left']
-        pad_count = 5
+        label_types = ['none', 'tap', 'up', 'down', 'right', 'left']
 
-        self.model = Alex(len(label_types) * pad_count)
+        self.model = Alex(len(label_types))
         optimizer = optimizers.MomentumSGD(lr=0.01, momentum=0.9)
         optimizer.setup(self.model)
 
@@ -75,3 +74,11 @@ class Trainer:
             print(self.model.forward(x).data)
 
         print('mean loss: {0}'.format(sum_loss / test_data_size))
+
+
+def main():
+    training_data = TrainingData(IMAGE_ROOT, NOTE_ROOT, VIDEO_ROOT, SONG_LIST_PATH)
+    x_train, x_test, y_train, y_test = training_data.get_train_data(['none', 'tap', 'up', 'down', 'right', 'left'])
+
+if __name__ == '__main__':
+    main()

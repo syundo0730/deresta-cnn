@@ -1,0 +1,1 @@
+for f in ../../data/scraped_data/video/raw/*.mp4 ; do ffmpeg -i $f ../../data/scraped_data/video/encoded/$f.avi; done

@@ -2,13 +2,12 @@
 
 from labeled_image_maker import LabeledImageFileMaker
 import numpy as np
+import os
 
 
-def labels_to_output(labels, label_types):
-    output = []
-    for label in labels:
-        output.extend([1 if type == label else 0 for type in label_types])
-    return np.asarray(output, dtype=np.int32)
+def label_to_output(label, label_types):
+    label_index = label_types.index(label)
+    return np.asarray([label_index], dtype=np.int32)
 
 
 class TrainingData:
@@ -51,7 +50,7 @@ class TrainingData:
             labeled_images
         ))
         y_train_all = np.asarray(map(
-            lambda labeled_image_file: labels_to_output(labeled_image_file.get_labels(), label_types),
+            lambda labeled_image_file: label_to_output(labeled_image_file.get_label(), label_types),
             labeled_images
         ))
         length = len(labeled_images)
@@ -78,3 +77,5 @@ class TrainingData:
     def _load_labeled_images(self):
         # もしファイルが存在していたら読み込む
         self.labeled_images = self.labeled_image_file_maker.load_all_songs()
+
+

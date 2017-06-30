@@ -6,9 +6,9 @@ import numpy as np
 
 class LabeledImageFile:
 
-    def __init__(self, file_path, labels):
+    def __init__(self, file_path, label):
         self.file_path = file_path
-        self.labels = labels
+        self.label = label
         self.raw_image = None
 
     def get_image(self):
@@ -16,8 +16,8 @@ class LabeledImageFile:
             self._load()
         return self._to_array()
 
-    def get_labels(self):
-        return self.labels
+    def get_label(self):
+        return self.label
 
     def _load(self):
         self.raw_image = Image.open(self.file_path)

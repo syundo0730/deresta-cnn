@@ -9,15 +9,15 @@ class Alex(chainer.Chain):
 
     """Single-GPU AlexNet without partition toward the channel axis."""
 
-    insize = 227
+    insize = 227 * 2  # 4 frame 入力するので、2 * 2
 
     def __init__(self, output_size):
         super(Alex, self).__init__(
-            conv1=L.Convolution2D(3, 96, 11, stride=4), # (227 - 11)/4 + 1 = 55
-            conv2=L.Convolution2D(96, 256, 5, pad=2), # (27 + 2*2 - 5)/1 + 1 = 27
-            conv3=L.Convolution2D(256, 384, 3, pad=1), # (13 + 1*2 - 3)/1 + 1 = 13
-            conv4=L.Convolution2D(384, 384, 3, pad=1), # (13 + 1*2 - 3)/1 + 1 = 13
-            conv5=L.Convolution2D(384, 256, 3, pad=1), # (13 + 1*2 - 3)/1 + 1 = 13
+            conv1=L.Convolution2D(1, 96, 11, stride=4),  # (227 - 11)/4 + 1 = 55
+            conv2=L.Convolution2D(96, 256, 5, pad=2),  # (27 + 2*2 - 5)/1 + 1 = 27
+            conv3=L.Convolution2D(256, 384, 3, pad=1),  # (13 + 1*2 - 3)/1 + 1 = 13
+            conv4=L.Convolution2D(384, 384, 3, pad=1),  # (13 + 1*2 - 3)/1 + 1 = 13
+            conv5=L.Convolution2D(384, 256, 3, pad=1),  # (13 + 1*2 - 3)/1 + 1 = 13
             # output of pool5: 6*6*256 = 9216
             fc6=L.Linear(9216, 4096),
             fc7=L.Linear(4096, 4096),
@@ -33,9 +33,9 @@ class Alex(chainer.Chain):
         return self.loss
 
     def forward(self, x):
-        pool1 = lambda x: F.max_pooling_2d(F.relu(F.local_response_normalization(x)), 3, stride=2) # (55 - 3)/2 + 1 = 27
-        pool2 = lambda x: F.max_pooling_2d(F.relu(F.local_response_normalization(x)), 3, stride=2) # (27 - 3)/2 + 1 = 13
-        pool5 = lambda x: F.max_pooling_2d(F.relu(x), 3, stride=2) # (13 - 3)
+        pool1 = lambda x: F.max_pooling_2d(F.relu(F.local_response_normalization(x)), 3, stride=2)  # (55 - 3)/2 + 1 = 27
+        pool2 = lambda x: F.max_pooling_2d(F.relu(F.local_response_normalization(x)), 3, stride=2)  # (27 - 3)/2 + 1 = 13
+        pool5 = lambda x: F.max_pooling_2d(F.relu(x), 3, stride=2)  # (13 - 3)
 
         h = pool1(self.conv1(x))
         h = pool2(self.conv2(h))
